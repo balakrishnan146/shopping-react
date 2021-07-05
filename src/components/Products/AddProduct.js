@@ -9,6 +9,7 @@ const AddProduct = () => {
     const imgURL = useInput(['required']);
     const price = useInput(['required', 'min']);
     const stock = useInput(['required', 'min']);
+    const discount = useInput(['discount']);
     const description = useInput([]);
 
     function isFormValid() {
@@ -20,12 +21,12 @@ const AddProduct = () => {
         const reqObj = {
             productName: productName.value,
             imgURL: imgURL.value,
-            price: price.value,
-            stock: stock.value,
+            price: +price.value,
+            stock: +stock.value,
+            discount: +discount.value,
             description: description.value,
         }
-        const response = await post(`${Constants.BASE_URL}products.json`, reqObj);
-        console.log(response);
+        await post(`${Constants.BASE_URL}products.json`, reqObj);
     }
 
     return (
@@ -46,6 +47,10 @@ const AddProduct = () => {
                 <div className='row my-1'>
                     <Label className='col-4'>Stock</Label>
                     <Input className='col-8' type='number' inputName={stock} />
+                </div>
+                <div className='row my-1'>
+                    <Label className='col-4'>Discount</Label>
+                    <Input className='col-8' type='number' inputName={discount} />
                 </div>
                 <div className='row my-1'>
                     <Label className='col-4'>Description</Label>

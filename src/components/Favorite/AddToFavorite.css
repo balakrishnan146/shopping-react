@@ -1,0 +1,5 @@
+.fav-fill-icon,
+.fav-icon:hover {
+    cursor: pointer;
+    color: #ff003e;
+}

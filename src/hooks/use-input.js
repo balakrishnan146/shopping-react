@@ -28,6 +28,9 @@ const useInput = (validations) => {
                     case 'min':
                         valid = +value > 0;
                         break;
+                    case 'discount':
+                        valid = +value >= 0 && +value <= 100;
+                        break;
                     default:
                         valid = true;
                 }

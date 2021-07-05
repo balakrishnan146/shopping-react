@@ -1,0 +1,17 @@
+.image {
+    height: 550px;
+}
+
+.selling-price {
+    font-weight: 500;
+}
+
+.price {
+    text-decoration: line-through;
+    font-weight: lighter;
+}
+
+.discount {
+    color: #ff905a;
+    font-weight: 500;
+}
