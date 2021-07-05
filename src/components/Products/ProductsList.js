@@ -13,14 +13,16 @@ const ProductsList = () => {
         const products = [];
         const productResponse = await get(`${Constants.BASE_URL}products.json`);
         for (const key in productResponse) {
-            products.push({
-                key,
-                productName: productResponse[key].productName,
-                imgURL: productResponse[key].imgURL,
-                stock: productResponse[key].stock,
-                price: productResponse[key].price,
-                description: productResponse[key].description
-            });
+            if (productResponse[key].stock > 0) {
+                products.push({
+                    key,
+                    productName: productResponse[key].productName,
+                    imgURL: productResponse[key].imgURL,
+                    stock: productResponse[key].stock,
+                    price: productResponse[key].price,
+                    description: productResponse[key].description
+                });
+            }
         }
         setProductList(products);
         products.length === 0 && setUserMessage('No Products Found!');

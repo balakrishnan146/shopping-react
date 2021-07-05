@@ -36,8 +36,9 @@ const ProductDetails = () => {
     }
 
     const addToCart = async () => {
-        const cartResponse = await post(`${Constants.BASE_URL}cart.json`, { ...product, productId: product.key, size: size.label, quantity: 1 });
-        console.log(cartResponse);
+        if (product.stock > 0) {
+            const cartResponse = await post(`${Constants.BASE_URL}cart.json`, { ...product, productId: productId, size: size.label, quantity: 1 });
+        }
     }
 
     useEffect(() => {
@@ -55,7 +56,7 @@ const ProductDetails = () => {
                     <h1 className='title'>{product?.productName}</h1>
                 </div>
                 <div className='row my-2'>
-                    <p>{product?.description}</p>
+                    <div>{product?.description}</div>
                 </div>
                 <div className='row my-2'>
                     <span className='selling-price mr-2'>
@@ -95,7 +96,7 @@ const ProductDetails = () => {
     return (
         <>
             {
-                product ? productTemplate : <p>{userMessage}</p>
+                product ? productTemplate : <div>{userMessage}</div>
             }
         </>
     )

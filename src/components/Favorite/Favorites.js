@@ -57,7 +57,7 @@ const Favorites = () => {
                         {favoritesTemplate}
                     </div>
                     :
-                    <p>{userMessage}</p>
+                    <div>{userMessage}</div>
             }
         </>
     );
