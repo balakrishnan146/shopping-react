@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { XLg, BagCheck } from 'react-bootstrap-icons';
+import { toast } from 'react-toastify';
 import { get, post, del } from '../Common/Http';
 import Constants from '../Common/Constants';
 import Alert from '../Common/Alert';
@@ -46,6 +47,9 @@ const Cart = () => {
     const placeOrder = async () => {
         if (getTotal() > 0) {
             const orderResponse = await post(`${Constants.BASE_URL}order.json`, { orderItems: cartItems, total: getTotal() });
+            const cartResponse = await del(`${Constants.BASE_URL}cart.json`);
+            getCartItems();
+            toast.success('Order Placed Successfully.', { autoClose: 3000 });
         }
     }
 
@@ -60,6 +64,7 @@ const Cart = () => {
                 productName: cartItemsResponse[key].productName,
                 description: cartItemsResponse[key].description,
                 imgURL: cartItemsResponse[key].imgURL,
+                size: cartItemsResponse[key].size,
                 stock: cartItemsResponse[key].stock,
                 price: cartItemsResponse[key].price,
                 quantity: cartItemsResponse[key].quantity,
