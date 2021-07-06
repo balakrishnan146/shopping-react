@@ -28,6 +28,10 @@ button:disabled {
   font-weight: 500;
 }
 
+.sub-title {
+  font-size: 20px;
+}
+
 .vertical-align-center {
   display: flex;
   justify-content: center;
@@ -42,4 +46,9 @@ a:hover {
   border-radius: .25rem;
   padding: 10px;
   margin: 10px;
+}
+
+.req {
+  color: #dc3545;
+  margin-left: 3px;
 }

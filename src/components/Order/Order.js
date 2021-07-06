@@ -59,7 +59,7 @@ const Order = () => {
                     {
                         order?.orderItems?.length > 0 &&
                         order.orderItems.map(item =>
-                            <div className='row vertical-align-center my-2 mx-0'>
+                            <div key={item.productId} className='row vertical-align-center my-2 mx-0'>
                                 <img src={item.imgURL} className='img-responsive' height='100' alt='Order Line Item' />
                                 <span className='ml-auto'>{item.productName} ( Size: {item.size}, Quantity: {item.quantity} )</span>
                                 <span className='ml-auto mr-3'>₹. {item.amount}</span>

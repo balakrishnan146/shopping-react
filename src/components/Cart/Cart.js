@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { XLg, BagCheck } from 'react-bootstrap-icons';
-import { toast } from 'react-toastify';
 import { get, post, del } from '../Common/Http';
 import Constants from '../Common/Constants';
 import Alert from '../Common/Alert';
@@ -47,13 +46,19 @@ const Cart = () => {
     const placeOrder = async () => {
         if (getTotal() > 0) {
             const orderResponse = await post(`${Constants.BASE_URL}order.json`, { orderItems: cartItems, total: getTotal() });
-            const cartResponse = await del(`${Constants.BASE_URL}cart.json`);
-            getCartItems();
-            toast.success('Order Placed Successfully.', { autoClose: 3000 });
+            if (orderResponse) {
+                const cartResponse = await del(`${Constants.BASE_URL}cart.json`);
+                getCartItems(true);
+                setUserMessage(
+                    <div className='vertical-align-center flex-column'>
+                        <Alert className='d-block m-2' type='success'>Order placed successfully. Your order id is #{orderResponse.name}</Alert>
+                        <NavLink className='btn btn-outline-info' to='/order'>Go to orders</NavLink>
+                    </div>);
+            }
         }
     }
 
-    const getCartItems = async () => {
+    const getCartItems = async (isOrdered) => {
         const cartItemList = [];
         const cartItemsResponse = await get(`${Constants.BASE_URL}cart.json`);
 
@@ -74,22 +79,25 @@ const Cart = () => {
         }
 
         setCartItems(cartItemList);
-        setUserMessage(cartItemList.length === 0 &&
-            <div className='vertical-align-center flex-column'>
-                <Alert className='d-block m-2' type='info'>You don't have any items in your cart.</Alert>
-                <NavLink className='btn btn-outline-info' to='/view-product'>Check our products here</NavLink>
-            </div>);
+        if (!isOrdered) {
+            setUserMessage(cartItemList.length === 0 &&
+                <div className='vertical-align-center flex-column'>
+                    <Alert className='d-block m-2' type='info'>You don't have any items in your cart.</Alert>
+                    <NavLink className='btn btn-outline-info' to='/view-product'>Check our products here</NavLink>
+                </div>);
+        }
     }
 
     useEffect(() => {
-        getCartItems();
+        getCartItems(false);
     }, []);
 
     const cartItemsTemplate = cartItems?.map((cartItem, index) =>
-        <div key={cartItem.key} className='col-12 my-2 vertical-align-center'>
+        <div key={cartItem.key} className='col-12 p-2 my-1 bg-light vertical-align-center'>
             <img src={cartItem.imgURL} className='img-responsive' height='100' alt='Cart Item' />
             <NavLink className='title font-weight-light ml-auto' to={`/view-product/${cartItem.productId}`}>
                 {cartItem?.productName}
+                <span className='sub-title'> (Size: {cartItem?.size})</span>
             </NavLink>
             <div className="btn-group mx-5" role="group" aria-label="Quantity group">
                 <button type="button" className="btn btn-outline-primary" disabled={cartItem.quantity === 1}
@@ -113,7 +121,7 @@ const Cart = () => {
                         <div className='row'>
                             {cartItemsTemplate}
                         </div>
-                        <div className='order-bar bg-light'>
+                        <div className='row order-bar bg-light'>
                             <span>Total: ₹. {getTotal()}</span>
                             <button disabled={getTotal() <= 0} className='btn btn-success ml-3' onClick={placeOrder}>
                                 <BagCheck className='align-baseline mr-2' />

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { BagPlus } from 'react-bootstrap-icons';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Alert from '../Common/Alert';
 import Select from '../Common/Select';
@@ -44,8 +43,10 @@ const ProductDetails = () => {
             history.push('/cart');
         } else if (product.stock > 0) {
             const cartResponse = await post(`${Constants.BASE_URL}cart.json`, { ...product, productId: productId, size: size.value, quantity: 1 });
-            toast.success('Successfully added to cart.', { autoClose: 3000 });
-            setAddedToCart(true);
+            if (cartResponse) {
+                toast.success('Successfully added to cart.', { autoClose: 3000 });
+                setAddedToCart(true);
+            }
         }
     }
 
@@ -68,7 +69,7 @@ const ProductDetails = () => {
                 </div>
                 <div className='row my-2'>
                     <span className='selling-price mr-2'>
-                        {product?.discount > 0 ? `₹. ${product?.price * product?.discount / 100}`
+                        {product?.discount > 0 ? `₹. ${product?.price * (1 - product?.discount / 100)}`
                             : `₹. ${product?.price}`}
                     </span>
                     {
@@ -92,7 +93,7 @@ const ProductDetails = () => {
                         </Select>
                     </div>
                     <div className='col-6'>
-                        <button disabled={!size.isValid && !addedToCart} className='btn btn-success' onClick={addToCart}><BagPlus className='align-baseline mr-2' />{ addedToCart ? 'Go to cart' : 'Add To Cart' }</button>
+                        <button disabled={!size.isValid && !addedToCart} className='btn btn-success' onClick={addToCart}><BagPlus className='align-baseline mr-2' />{addedToCart ? 'Go to cart' : 'Add To Cart'}</button>
                     </div>
                     {
                         size.hasError && <Alert className='my-2' type='danger'>Please select a size before adding to cart.</Alert>

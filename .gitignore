@@ -35,6 +35,7 @@ yarn-error.log*# See https://help.github.com/articles/ignoring-files/ for more a
 
 # production
 /build
+.firebase/hosting.YnVpbGQ.cache
 
 # misc
 .DS_Store
